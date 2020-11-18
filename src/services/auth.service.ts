@@ -1,18 +1,33 @@
-import axios from "axios";
 import { LOGIN_URL, LOGOUT_URL, REGISTER_URL } from "../settings";
 import { LoginFormData, RegistrationFormData } from "../shared/interfaces/auth";
 
 class AuthService {
   static async login(loginData: LoginFormData) {
-    return await axios.post(LOGIN_URL, loginData);
+    return fetch(LOGIN_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(loginData),
+    });
   }
 
   static async logout() {
-    return axios.get(LOGOUT_URL);
+    return fetch(LOGOUT_URL, {
+      method: "GET",
+    });
   }
 
   static async register(registrationData: RegistrationFormData) {
-    return axios.post(REGISTER_URL, registrationData);
+    return fetch(REGISTER_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(registrationData),
+    });
   }
 }
 
