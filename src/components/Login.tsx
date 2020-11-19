@@ -1,10 +1,13 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
 import { useFormik } from "formik";
 
 import { isEmailValid } from "../shared/validators/validators";
 import { LoginFormData, LoginFormErrors } from "../shared/interfaces/auth";
 import { loginUser } from "../actions/auth";
+import { RootState } from "../reducers";
+import { AuthenticationState } from "../actions/types";
 
 // TODO: change this validate function to a yup schema perhaps
 const validate = (loginForm: LoginFormData): LoginFormErrors => {
@@ -24,6 +27,9 @@ const validate = (loginForm: LoginFormData): LoginFormErrors => {
 };
 
 const Login = () => {
+  const { isAuthenticated } = useSelector(
+    (state: RootState): AuthenticationState => state.auth
+  );
   const dispatch = useDispatch();
   const { handleSubmit, handleChange, handleBlur, touched, errors } = useFormik(
     {
@@ -37,6 +43,10 @@ const Login = () => {
       },
     }
   );
+
+  if (isAuthenticated) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div className="col-md-12 row justify-content-center">

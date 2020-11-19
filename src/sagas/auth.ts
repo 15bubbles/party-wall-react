@@ -30,9 +30,9 @@ export function* loginSaga({ payload }: ReturnType<typeof loginUser>) {
 
 export function* logoutSaga() {
   try {
-    yield call(AuthService.logout);
-    yield put({ type: LOGOUT_SUCCESS });
+    const response = yield call(AuthService.logout);
+    yield put({ type: LOGOUT_SUCCESS, payload: response });
   } catch (error) {
-    yield put({ type: LOGOUT_FAILURE });
+    yield put({ type: LOGOUT_FAILURE, payload: error });
   }
 }

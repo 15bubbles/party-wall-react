@@ -1,4 +1,8 @@
-import { LoginFormData, RegistrationFormData } from "../shared/interfaces/auth";
+import {
+  LoginFormData,
+  RegistrationFormData,
+  User,
+} from "../shared/interfaces/auth";
 
 export const REGISTER_USER = "REGISTER_USER";
 export const REGISTER_FAILURE = "REGISTER_FAILURE";
@@ -32,7 +36,7 @@ export interface RegisterUserAction {
 
 export interface AuthenticationState {
   isAuthenticated: boolean;
-  user: null | object;
+  user: null | User;
 }
 
 export type AuthenticationActionTypes =

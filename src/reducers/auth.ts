@@ -9,13 +9,11 @@ import {
   AuthenticationActionTypes,
 } from "../actions/types";
 
-const initialState: AuthenticationState = {
-  isAuthenticated: false,
-  user: null,
-};
-
 const authReducers = (
-  state = initialState,
+  state: AuthenticationState = {
+    isAuthenticated: false,
+    user: null,
+  },
   action: AuthenticationActionTypes
 ) => {
   const { type, payload } = action;

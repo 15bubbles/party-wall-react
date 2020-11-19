@@ -1,5 +1,6 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Redirect, useHistory } from "react-router-dom";
 import { useFormik } from "formik";
 
 import { registerUser } from "../actions/auth";
@@ -15,6 +16,8 @@ import {
   RegistrationFormData,
   RegistrationFormErrors,
 } from "../shared/interfaces/auth";
+import { RootState } from "../reducers";
+import { AuthenticationState } from "../actions/types";
 
 const validatePassword = (password: string): string => {
   const passwordErrorBase = "Password should contain ";
@@ -75,15 +78,23 @@ const validate = (
     errors.confirmPassword = "Passwords do not match";
   }
 
-  // name validation
-  if (!registrationForm.name) {
-    errors.name = "This field is required";
+  // first name validation
+  if (!registrationForm.firstName) {
+    errors.firstName = "This field is required";
+  }
+
+  // last name validation
+  if (!registrationForm.lastName) {
+    errors.lastName = "This field is required";
   }
 
   return errors;
 };
 
 const Register = () => {
+  const { isAuthenticated } = useSelector(
+    (state: RootState): AuthenticationState => state.auth
+  );
   const dispatch = useDispatch();
   const { handleSubmit, handleChange, handleBlur, touched, errors } = useFormik(
     {
@@ -91,7 +102,8 @@ const Register = () => {
         email: "",
         password: "",
         confirmPassword: "",
-        name: "",
+        firstName: "",
+        lastName: "",
       },
       validate,
       onSubmit: (registrationForm: RegistrationFormData): void => {
@@ -99,6 +111,10 @@ const Register = () => {
       },
     }
   );
+
+  if (isAuthenticated) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div className="col-md-12 row justify-content-center">
@@ -164,20 +180,39 @@ const Register = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="firstName">First name</label>
             <input
               type="text"
-              name="name"
-              id="name"
+              name="firstName"
+              id="firstName"
               className={`form-control ${
-                touched.name && errors.name ? "is-invalid" : ""
+                touched.firstName && errors.firstName ? "is-invalid" : ""
               }`}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            {touched.name && errors.name ? (
+            {touched.firstName && errors.firstName ? (
               <div className="validation-error">
-                <small className="text-danger">{errors.name}</small>
+                <small className="text-danger">{errors.firstName}</small>
+              </div>
+            ) : null}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="lastName">Last name</label>
+            <input
+              type="text"
+              name="lastName"
+              id="lastName"
+              className={`form-control ${
+                touched.lastName && errors.lastName ? "is-invalid" : ""
+              }`}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {touched.lastName && errors.lastName ? (
+              <div className="validation-error">
+                <small className="text-danger">{errors.lastName}</small>
               </div>
             ) : null}
           </div>
